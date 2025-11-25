@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -45,6 +43,19 @@ def get_ocorrencia_professor(request, pk):
     ocorrencias = Ocorrencia.objects.filter(professor=professor.id)
 
     serializer = GetOcorrenciaSerializer(ocorrencias, many=True)
+    if serializer.data:
+        return Response(serializer.data)
+    return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def get_turma_professor(request, pk):
+    try:
+        professor = Professor.objects.get(pk=pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    turmas = TurmaDisciplina.objects.filter(professor=professor.id)
+    serializer = TurmaDisciplinaSerializer(turmas, many=True)
     if serializer.data:
         return Response(serializer.data)
     return Response(status=status.HTTP_404_NOT_FOUND)

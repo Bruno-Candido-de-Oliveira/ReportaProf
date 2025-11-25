@@ -12,6 +12,11 @@ class TurmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = '__all__'
+        
+class DisciplinaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disciplina
+        fields = '__all__'
 
 class DependenciaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,6 +34,9 @@ class ProfessorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TurmaDisciplinaSerializer(serializers.ModelSerializer):
+    turma = TurmaSerializer()
+    disciplina = DisciplinaSerializer()
+    professor = ProfessorSerializer()
     class Meta:
         model = TurmaDisciplina
         fields = '__all__'
