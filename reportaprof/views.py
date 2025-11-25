@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Estudante, Turma, TurmaDisciplina, Situacao, Ocorrencia, Dependencia
+from .models import Estudante, Turma, TurmaDisciplina, Situacao, Ocorrencia, Dependencia, Professor
 from .serializers import (EstudanteSerializer, TurmaSerializer, TurmaDisciplinaSerializer, SituacaoSerializer,
                           GetOcorrenciaSerializer, PostOcorrenciaSerializer, DependenciaSerializer)
 
@@ -31,6 +31,20 @@ def get_alunos_disciplina(request, pk):
     estudantes = Estudante.objects.filter(turma=turma_disciplina.turma_id)
 
     serializer = EstudanteSerializer(estudantes, many=True)
+    if serializer.data:
+        return Response(serializer.data)
+    return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def get_ocorrencia_professor(request, pk):
+    try:
+        professor = Professor.objects.get(pk=pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    ocorrencias = Ocorrencia.objects.filter(professor=professor.id)
+
+    serializer = GetOcorrenciaSerializer(ocorrencias, many=True)
     if serializer.data:
         return Response(serializer.data)
     return Response(status=status.HTTP_404_NOT_FOUND)
@@ -67,5 +81,19 @@ def new_ocorrencia(request):
     
     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def edit_ocorrencia(request, pk):
+    try:
+        ocorrencia = Ocorrencia.objects.get(pk=pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = PostOcorrenciaSerializer(ocorrencia, data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
     

@@ -52,7 +52,7 @@ class TurmaDisciplina(models.Model):
     
 class Situacao(models.Model):
     id = models.AutoField(primary_key=True)
-    situacao = models.CharField(max_length=200)
+    nome = models.CharField(max_length=200)
 
     def __str__(self):
         return self.situacao
@@ -60,11 +60,11 @@ class Situacao(models.Model):
 class Ocorrencia(models.Model):
     id = models.AutoField(primary_key=True)
     data_hora = models.DateTimeField(auto_now=True)
-    professor = models.ForeignKey(Professor, related_name='ocorrencias', on_delete=models.PROTECT)
-    turma = models.ForeignKey(Turma, related_name='ocorrencias', on_delete=models.PROTECT)
-    dependencia = models.ForeignKey(Dependencia, related_name='Ocorrencia', on_delete=models.PROTECT, null=True, blank=True)
-    estudantes = models.ManyToManyField(Estudante, related_name='ocorrencias')
-    situacao = models.ManyToManyField(Situacao, related_name='ocorrencias')
+    professor = models.ForeignKey(Professor, related_name='ocorrencia', on_delete=models.PROTECT)
+    turma = models.ForeignKey(Turma, related_name='ocorrencia', on_delete=models.PROTECT)
+    dependencia = models.ForeignKey(Dependencia, related_name='ocorrencia', on_delete=models.PROTECT, null=True, blank=True)
+    estudantes = models.ManyToManyField(Estudante, related_name='ocorrencia')
+    situacao = models.ManyToManyField(Situacao, related_name='ocorrencia')
     observacao = models.TextField(max_length=300, blank=True)
     
     def __str__(self):
