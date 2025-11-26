@@ -1,16 +1,39 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from .views import TurmaList, DependenciasList, EstudantesTurmasList, OcorrenciasList, OcorrenciasProfessor, TurmaProfessorList, SituacoesList, OcorrenciaIdView
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Pastebin API",
+        default_version='v1',
+        description="API description",
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
-    path('turmas/', views.get_turmas, name='get_turmas'),
-    path('turmas/<int:pk>/estudantes/', views.get_alunos_disciplina),
-    path('turmas/<int:pk>/professor', views.get_turma_professor),
-    path('dependencias/', views.get_dependencias, name='get_dependencias'),
-    path('situacoes/', views.get_situacoes, name='get_situacoes'),
-    path('ocorrencias/', views.get_ocorrencias, name='get_ocorrencias'),
-    path('ocorrencia/<int:pk>', views.get_ocorrencia_id, name='get_ocorrencia_id'),
+    path('turmas/', TurmaList.as_view(), name='turma-list'),
+    path('turmas/<int:pk>/estudantes/', EstudantesTurmasList.as_view(), name='estudantes-disciplina-list'),
+    path('turmas/<int:pk>/professor', TurmaProfessorList.as_view(), name='turma-professor-list'),
+    path('dependencias/', DependenciasList.as_view(), name='dependencia-list'),
+    path('situacoes/', SituacoesList.as_view(), name='situacoes.list'),
+    path('ocorrencias/', OcorrenciasList.as_view(), name='ocorrencias-list'),
+    path('ocorrencia/<int:pk>', OcorrenciaIdView.as_view(), name='ocorrencia-id-view'),
     path('ocorrencias/novo', views.new_ocorrencia, name='set_ocorrencias'),
     path('ocorrencia/<int:pk>/edit', views.edit_ocorrencia, name='edit_ocorrencia'),
-    path('ocorrencias/<int:pk>/professor', views.get_ocorrencia_professor, name='get_ocorrencia_professor'),
+    path('ocorrencias/<int:pk>/professor', OcorrenciasProfessor.as_view(), name='ocorrencias-professor'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
+
+
+
+
+
+
+

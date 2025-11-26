@@ -1,76 +1,71 @@
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from .models import Estudante, Turma, TurmaDisciplina, Situacao, Ocorrencia, Dependencia, Professor
 from .serializers import (EstudanteSerializer, TurmaSerializer, TurmaDisciplinaSerializer, SituacaoSerializer,
                           GetOcorrenciaSerializer, PostOcorrenciaSerializer, DependenciaSerializer)
 
+from django.urls import path
+from rest_framework_swagger.views import get_swagger_view
+
 import json
 
-@api_view(['GET'])
-def get_turmas(request):
-    turmas = Turma.objects.all()
-    serializer = TurmaSerializer(turmas, many=True)
-    return Response(serializer.data)
+'''class TurmaList(APIView):
+    def get(self, request):
+        turmas = Turma.objects.all()
+        serializer = TurmaSerializer(turmas, many=True)
+        return Response(serializer.data)'''
+        
+class TurmaList(generics.ListAPIView):
+    queryset = Turma.objects.all()
+    serializer_class = TurmaSerializer
 
-@api_view(['GET'])
-def get_dependencias(request):
-    dependencias = Dependencia.objects.all()
-    serializer = DependenciaSerializer(dependencias, many=True)
-    return Response(serializer.data)
+class DependenciasList(generics.ListAPIView):
+    queryset = Dependencia.objects.all()
+    serializer_class = DependenciaSerializer
     
-@api_view(['GET'])
-def get_alunos_disciplina(request, pk):
-    try:
-        turma_disciplina = TurmaDisciplina.objects.get(pk=pk)
-    except:
-         return Response(status=status.HTTP_404_NOT_FOUND)
-
-    estudantes = Estudante.objects.filter(turma=turma_disciplina.turma_id)
-
-    serializer = EstudanteSerializer(estudantes, many=True)
-    if serializer.data:
-        return Response(serializer.data)
-    return Response(status=status.HTTP_404_NOT_FOUND)
-
-@api_view(['GET'])
-def get_ocorrencia_professor(request, pk):
-    try:
-        professor = Professor.objects.get(pk=pk)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class EstudantesTurmasList(generics.ListAPIView):
+    serializer_class = EstudanteSerializer
     
-    ocorrencias = Ocorrencia.objects.filter(professor=professor.id)
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        turma_disciplina = get_object_or_404(TurmaDisciplina, pk=pk)
+        return Estudante.objects.filter(turma = turma_disciplina.turma_id)
 
-    serializer = GetOcorrenciaSerializer(ocorrencias, many=True)
-    if serializer.data:
-        return Response(serializer.data)
-    return Response(status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET'])
-def get_turma_professor(request, pk):
-    try:
-        professor = Professor.objects.get(pk=pk)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class OcorrenciasProfessor(generics.ListAPIView):
+    serializer_class = GetOcorrenciaSerializer
     
-    turmas = TurmaDisciplina.objects.filter(professor=professor.id)
-    serializer = TurmaDisciplinaSerializer(turmas, many=True)
-    if serializer.data:
-        return Response(serializer.data)
-    return Response(status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        professor = get_object_or_404(Professor, pk=pk)
+        return Ocorrencia.objects.filter(professor = professor.id)
+    
+    
+class TurmaProfessorList(generics.ListAPIView):
+    serializer_class = TurmaDisciplinaSerializer
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        professor = get_object_or_404(Professor, pk=pk)
+        return TurmaDisciplina.objects.filter(professor = professor.id)
 
-@api_view(['GET'])
-def get_situacoes(request):
-    situacoes = Situacao.objects.all()
-    serializer = SituacaoSerializer(situacoes, many=True)
-    return Response(serializer.data)
+class SituacoesList(generics.ListAPIView):
+    queryset = Situacao.objects.all()
+    serializer_class = SituacaoSerializer
 
-@api_view(['GET'])
-def get_ocorrencias(request):
-    ocorrencias = Ocorrencia.objects.all()
-    serializer = GetOcorrenciaSerializer(ocorrencias, many=True)
-    return Response(serializer.data)
+class OcorrenciasList(generics.ListAPIView):
+    queryset = Ocorrencia.objects.all()
+    serializer_class = GetOcorrenciaSerializer
+
+class OcorrenciaIdView(generics.ListAPIView):
+    serializer_class = Ocorrencia
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        ocorrencia = Ocorrencia.objects.filter(pk = pk)
 
 @api_view(['GET'])
 def get_ocorrencia_id(request, pk):
@@ -106,5 +101,9 @@ def edit_ocorrencia(request, pk):
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
     
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
     
