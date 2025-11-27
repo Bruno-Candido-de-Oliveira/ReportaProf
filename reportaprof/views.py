@@ -1,7 +1,5 @@
-from rest_framework.decorators import api_view
-from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import Estudante, Turma, TurmaDisciplina, Situacao, Ocorrencia, Dependencia, Professor
 from .serializers import (EstudanteSerializer, TurmaSerializer, TurmaDisciplinaSerializer, SituacaoSerializer,
@@ -9,16 +7,9 @@ from .serializers import (EstudanteSerializer, TurmaSerializer, TurmaDisciplinaS
 
 from django.urls import path
 from rest_framework_swagger.views import get_swagger_view
-
-import json
-
-'''class TurmaList(APIView):
-    def get(self, request):
-        turmas = Turma.objects.all()
-        serializer = TurmaSerializer(turmas, many=True)
-        return Response(serializer.data)'''
         
 class TurmaList(generics.ListAPIView):
+    #permission_classes = (IsAuthenticated,)
     queryset = Turma.objects.all()
     serializer_class = TurmaSerializer
 
@@ -60,50 +51,14 @@ class OcorrenciasList(generics.ListAPIView):
     queryset = Ocorrencia.objects.all()
     serializer_class = GetOcorrenciaSerializer
 
-class OcorrenciaIdView(generics.ListAPIView):
-    serializer_class = Ocorrencia
-    
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        ocorrencia = Ocorrencia.objects.filter(pk = pk)
+class OcorrenciaIdView(generics.RetrieveAPIView):
+    queryset = Ocorrencia.objects.all()
+    serializer_class = GetOcorrenciaSerializer
 
-@api_view(['GET'])
-def get_ocorrencia_id(request, pk):
-    try:
-        ocorrencia = Ocorrencia.objects.get(pk=pk)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = GetOcorrenciaSerializer(ocorrencia)
-    return Response(serializer.data)
+class NovaOcorrencia(generics.CreateAPIView):
+    serializer_class = PostOcorrenciaSerializer
+    queryset = Ocorrencia.objects.all()
 
-@api_view(['POST'])
-def new_ocorrencia(request):
-    ocorrencia = request.data
-    serializer = PostOcorrenciaSerializer(data=ocorrencia)
-    
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['PUT'])
-def edit_ocorrencia(request, pk):
-    try:
-        ocorrencia = Ocorrencia.objects.get(pk=pk)
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = PostOcorrenciaSerializer(ocorrencia, data=request.data)
-
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-    
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-    
+class EditOcorrencia(generics.UpdateAPIView):
+    queryset = Ocorrencia.objects.all()
+    serializer_class = PostOcorrenciaSerializer
