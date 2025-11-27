@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import permissions
 from .views import (TurmaList, DependenciasList, EstudantesTurmasList, OcorrenciasList, OcorrenciasProfessor,
-                    TurmaProfessorList, SituacoesList, OcorrenciaIdView, NovaOcorrencia, EditOcorrencia)
+                    TurmaProfessorList, SituacoesList, OcorrenciaIdView, NovaOcorrencia, EditOcorrencia, OcorrenciasEstudante)
 
 
 from drf_yasg.views import get_schema_view
@@ -29,6 +29,7 @@ urlpatterns = [
     path('ocorrencias/novo', NovaOcorrencia.as_view(), name='nova-ocorrencia'),
     path('ocorrencia/<int:pk>/edit', EditOcorrencia.as_view(), name='edit-ocorrencia'),
     path('ocorrencias/<int:pk>/professor', OcorrenciasProfessor.as_view(), name='ocorrencias-professor'),
+    path('ocorrencias/<int:pk>/estudante', OcorrenciasEstudante.as_view(), name='ocorrencias-estudante'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 

@@ -1,6 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from rest_framework import status, generics
+from rest_framework import generics
 from .models import Estudante, Turma, TurmaDisciplina, Situacao, Ocorrencia, Dependencia, Professor
 from .serializers import (EstudanteSerializer, TurmaSerializer, TurmaDisciplinaSerializer, SituacaoSerializer,
                           GetOcorrenciaSerializer, PostOcorrenciaSerializer, DependenciaSerializer)
@@ -33,8 +33,14 @@ class OcorrenciasProfessor(generics.ListAPIView):
         pk = self.kwargs.get('pk')
         professor = get_object_or_404(Professor, pk=pk)
         return Ocorrencia.objects.filter(professor = professor.id)
-    
-    
+
+class OcorrenciasEstudante(generics.ListAPIView):
+    serializer_class = GetOcorrenciaSerializer
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        estudante = get_object_or_404(Estudante, pk=pk)
+        return Ocorrencia.objects.filter(estudantes = estudante.id)
+        
 class TurmaProfessorList(generics.ListAPIView):
     serializer_class = TurmaDisciplinaSerializer
     
