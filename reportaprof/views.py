@@ -33,6 +33,14 @@ class OcorrenciasProfessor(generics.ListAPIView):
     def get_queryset(self):
         professor_logado = self.request.user.professor
         return Ocorrencia.objects.filter(professor = professor_logado)
+    
+class OcorrenciasProfessorID(generics.ListAPIView):
+    serializer_class = GetOcorrenciaSerializer
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        professor = get_object_or_404(Professor, pk=pk)
+        return Ocorrencia.objects.filter(professor = professor.id)
 
 class OcorrenciasEstudante(generics.ListAPIView):
     serializer_class = GetOcorrenciaSerializer
@@ -48,6 +56,14 @@ class TurmaProfessorList(generics.ListAPIView):
     def get_queryset(self):
         professor_logado = self.request.user.professor
         return TurmaDisciplina.objects.filter(professor = professor_logado)
+
+class TurmaProfessorListID(generics.ListAPIView):
+    serializer_class = TurmaDisciplinaSerializer
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        professor = get_object_or_404(Professor, pk=pk)
+        return TurmaDisciplina.objects.filter(professor = professor.id)
 
 class SituacoesList(generics.ListAPIView):
     queryset = Situacao.objects.all()
