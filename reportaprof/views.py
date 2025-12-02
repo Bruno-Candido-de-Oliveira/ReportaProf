@@ -9,7 +9,7 @@ from django.urls import path
 from rest_framework_swagger.views import get_swagger_view
         
 class TurmaList(generics.ListAPIView):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     queryset = Turma.objects.all()
     serializer_class = TurmaSerializer
 
@@ -28,11 +28,11 @@ class EstudantesTurmasList(generics.ListAPIView):
 
 class OcorrenciasProfessor(generics.ListAPIView):
     serializer_class = GetOcorrenciaSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        professor = get_object_or_404(Professor, pk=pk)
-        return Ocorrencia.objects.filter(professor = professor.id)
+        professor_logado = self.request.user.professor
+        return Ocorrencia.objects.filter(professor = professor_logado)
 
 class OcorrenciasEstudante(generics.ListAPIView):
     serializer_class = GetOcorrenciaSerializer

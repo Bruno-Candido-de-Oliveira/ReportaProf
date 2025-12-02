@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Dependencia(models.Model):
     id = models.AutoField(primary_key=True)
@@ -36,6 +37,7 @@ class Disciplina(models.Model):
 
 class Professor(models.Model):
     id = models.AutoField(primary_key=True)
+    usuario = models.OneToOneField(User, related_name='professor', null=True, blank=True, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100)
     
     def __str__(self):
