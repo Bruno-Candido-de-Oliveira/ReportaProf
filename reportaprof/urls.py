@@ -22,6 +22,7 @@ urlpatterns = [
     path('turmas/', TurmaList.as_view(), name='turma-list'),
     path('turmas/<int:pk>/estudantes/', EstudantesTurmasList.as_view(), name='estudantes-disciplina-list'),
     path('turmas/<int:pk>/professor', TurmaProfessorList.as_view(), name='turma-professor-list'),
+    path('minhas_turmas/', TurmaProfessorList.as_view(), name='turma-professor-list'),
     path('dependencias/', DependenciasList.as_view(), name='dependencia-list'),
     path('situacoes/', SituacoesList.as_view(), name='situacoes.list'),
     path('ocorrencias/', OcorrenciasList.as_view(), name='ocorrencias-list'),

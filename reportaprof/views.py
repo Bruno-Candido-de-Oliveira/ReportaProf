@@ -43,11 +43,11 @@ class OcorrenciasEstudante(generics.ListAPIView):
         
 class TurmaProfessorList(generics.ListAPIView):
     serializer_class = TurmaDisciplinaSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        professor = get_object_or_404(Professor, pk=pk)
-        return TurmaDisciplina.objects.filter(professor = professor.id)
+        professor_logado = self.request.user.professor
+        return TurmaDisciplina.objects.filter(professor = professor_logado)
 
 class SituacoesList(generics.ListAPIView):
     queryset = Situacao.objects.all()
