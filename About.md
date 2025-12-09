@@ -1,7 +1,7 @@
 # ReportaProf
 
 O ReportaProf é um projeto realizado nas disciplinas de Análise e Modelagem de Sistemas, WEB II e Mobile para o 4º período do curso de ADS.
-O projeto foi realizado em colaboração com o [João Gabriel](https://github.com/gabjoao), que realizou o [backend do projeto](https://github.com/gabjoao/ReportaProf).
+O projeto foi realizado em colaboração com o [João Gabriel](https://github.com/gabjoao), que realizou o [front-end do projeto](https://github.com/gabjoao/ReportaProf).
 
 ### O problema
 
