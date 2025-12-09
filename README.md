@@ -1,6 +1,6 @@
 # Para inicializar o back-end:
 
-Após baixar e extrair os arquivos do projeto em uma pasta, siga os seguintes passos:
+Após baixar e extrair os arquivos do projeto em uma pasta, no terminal, siga os seguintes passos:
 
 - 1 - Criar a variável de ambiente "python -m venv venv"
 - 2 - Inicializar a variável de ambiente "venv\Scripts\activate"
