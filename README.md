@@ -1,4 +1,4 @@
-Para inicializar o back-end:
+# Para inicializar o back-end:
 
 Após baixar e extrair os arquivos do projeto em uma pasta, siga os seguintes passos:
 
