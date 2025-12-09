@@ -5,7 +5,7 @@ O projeto foi realizado em colaboração com o [João Gabriel](https://github.co
 
 ### O problema
 
-O contexto de realização do projeto é a vivência dos professores da rede estadual que enfrentam desafios relacionados à indisciplina em sala de aula. O protocolo vigente para acionar o apoio da equipe pedagógica exige o deslocamento físico do professor ou de um aluno.
+Como professor da rede pública do estado de Santa Catarina, percebi o desafio que os colegas de profissão enfrentam diante de situações de indisciplina em suas aulas. Sempre que ocorre uma situação que é necessário a intervenção da equipe pedagógica, o protocolo vigente para acionar o apoio exige o deslocamento físico do professor ou de um aluno.
 As quatro formas possíveis de comunicação demonstram ineficiência:
 * Professor se ausenta da sala: O professor precisa deixar a sala de aula, deixando os alunos sozinhos e correndo o risco de que a situação de indisciplina se agrave.
 * Aluno representante é enviado: O aluno representante pode sofrer interrupções durante o processo, não saber relatar claramente a situação ou ter dificuldades em encontrar a equipe pedagógica.
